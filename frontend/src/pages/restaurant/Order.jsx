@@ -1,76 +1,113 @@
 import { useEffect, useState } from "react";
-import {
-  getRestaurantOrders,
-  updateOrderStatus,
-} from "../../api/order.api";
+import { Card, Badge, Form } from "react-bootstrap";
+import { getOrdersForRestaurant, updateOrderStatus } from "../../api/order.api";
 
-const Orders = () => {
+const Order = () => {
+  const restaurantId = "693f029aa3617013d3284f5f";
 
-  const restaurantId = localStorage.getItem("restaurantId");
   const [orders, setOrders] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  const fetchOrders = async () => {
+    try {
+      const res = await getOrdersForRestaurant(restaurantId);
+      setOrders(res.data.orders || []);
+    } catch (err) {
+      console.error("Failed to load orders", err);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   useEffect(() => {
     fetchOrders();
   }, []);
 
-  const fetchOrders = async () => {
-    const res = await getRestaurantOrders(restaurantId);
-    setOrders(res.data);
-  };
-
   const changeStatus = async (id, status) => {
-    await updateOrderStatus(id, status);
+    await updateOrderStatus(id, { status });
     fetchOrders();
   };
 
+  const getBadgeVariant = (status) => {
+    switch (status) {
+      case "pending":
+        return "warning";
+      case "preparing":
+        return "info";
+      case "out-for-delivery":
+        return "primary";
+      case "completed":
+        return "success";
+      case "cancelled":
+        return "danger";
+      default:
+        return "secondary";
+    }
+  };
+
+  if (loading) return <p>Loading orders...</p>;
+
+  const activeOrders = orders.filter(
+    (order) =>
+      order.status !== "completed" &&
+      order.status !== "cancelled"
+  );
+
+  if (activeOrders.length === 0)
+    return <p>No active orders</p>;
+
   return (
-  <div className="container">
-    <h2 className="mb-4">Orders</h2>
+    <div>
+      <h2>Active Orders</h2>
 
-    {orders.length === 0 ? (
-      <div className="card text-center p-5">
-        <div style={{ fontSize: "48px" }}>📦</div>
-        <h5 className="mt-3">No orders yet</h5>
-        <p className="text-muted">
-          Orders placed by customers will appear here.
-        </p>
-      </div>
-    ) : (
-      orders.map((order) => (
-        <div className="card p-3 mb-3" key={order._id}>
-          <div className="d-flex justify-content-between">
-            <div>
-              <h6>Order #{order._id.slice(-6)}</h6>
-              <p className="text-muted">
-                {new Date(order.createdAt).toLocaleString()}
-              </p>
+      {activeOrders.map((order) => (
+        <Card key={order._id} className="mb-3">
+          <Card.Body>
+            <div className="d-flex justify-content-between align-items-center">
+              <strong>Order #{order._id.slice(-6)}</strong>
 
+              <Badge bg={getBadgeVariant(order.status)}>
+                {order.status.toUpperCase()}
+              </Badge>
+            </div>
+
+            <p className="mt-2">
+              <strong>Customer:</strong> {order.customer?.name}
+            </p>
+
+            <ul>
               {order.items.map((item) => (
-                <div key={item._id}>
-                  {item.quantity}x {item.name}
-                </div>
+                <li key={item._id}>
+                  {item.menuItem?.name} × {item.quantity}
+                </li>
               ))}
-            </div>
+            </ul>
 
-            <div className="text-end">
-              <span
-                className={`badge ${
-                  order.status === "cancelled"
-                    ? "bg-danger"
-                    : "bg-success"
-                }`}
-              >
-                {order.status}
-              </span>
+            <p>
+              <strong>Total:</strong> ₹{order.totalPrice}
+            </p>
 
-              <h5 className="mt-2">₹{order.total}</h5>
-            </div>
-          </div>
-        </div>
-      ))
-    )}
-  </div>
-);
-}
+            <Form.Select
+              className="mt-2"
+              value={order.status}
+              onChange={(e) =>
+                changeStatus(order._id, e.target.value)
+              }
+            >
+              <option value="pending">Pending</option>
+              <option value="confirmed">Confirmed</option>
+              <option value="preparing">Preparing</option>
+              <option value="out-for-delivery">
+                Out for delivery
+              </option>
+              <option value="completed">Completed</option>
+              <option value="cancelled">Cancelled</option>
+            </Form.Select>
+          </Card.Body>
+        </Card>
+      ))}
+    </div>
+  );
+};
 
-export default Orders;
+export default Order;

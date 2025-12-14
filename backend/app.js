@@ -22,7 +22,7 @@ const customerRoutes=require("./routes/customer.routes")
 app.use("/customer", customerRoutes );
 
 const orderRoutes=require("./routes/order.routes")
-app.use("/orders", orderRoutes);
+app.use("/order", orderRoutes);
 
 const adminRoutes=require("./routes/admin.routes");
 app.use("/admin",adminRoutes);

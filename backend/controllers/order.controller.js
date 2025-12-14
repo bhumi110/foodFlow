@@ -2,13 +2,13 @@ const Order = require("../models/Order");
 
 exports.createOrder = async (req, res) => {
   try {
-    const { restaurant, items, totalPrice } = req.body;
+    const { restaurant, items, totalAmount } = req.body;
 
     const order = await Order.create({
       customer: req.user.id, 
       restaurant,
       items,
-      totalPrice
+      totalPrice: totalAmount,
     });
 
     res.json({
@@ -43,15 +43,25 @@ exports.getOrdersForRestaurant = async (req, res) => {
   try {
     const { restaurantId } = req.params;
 
+    if (!restaurantId) {
+      return res.status(400).json({ msg: "Restaurant ID required" });
+    }
+
     const orders = await Order.find({ restaurant: restaurantId })
-      .populate("customer")
-      .populate("items.menuItem");
+      .populate("customer", "email name")
+      .populate("items.menuItem", "name price");
 
     res.json({ orders });
   } catch (err) {
-    res.status(500).json({ msg: "Server Error", error: err.message });
+    console.error("Restaurant Orders Error:", err);
+    res.status(500).json({
+      msg: "Failed to fetch restaurant orders",
+      error: err.message,
+    });
   }
 };
+
+
 
 
 exports.updateOrderStatus = async (req, res) => {
@@ -71,3 +81,25 @@ exports.updateOrderStatus = async (req, res) => {
     res.status(500).json({ msg: "Server Error", error: err.message });
   }
 };
+
+exports.getOrdersForCustomer = async (req, res) => {
+  try {
+    const {customerId}=req.params;
+    if (!customerId) {
+      return res.status(400).json({ msg: "customer ID required" });
+    }
+    const orders = await Order.find({ customer: customerId })
+      .populate("customer", "email name")
+      .populate("items.menuItem", "name price");
+
+    res.json({ orders });
+  } catch (err) {
+    console.error("Restaurant Orders Error:", err);
+    res.status(500).json({
+      msg: "Failed to fetch restaurant orders",
+      error: err.message,
+    });
+  }
+};
+
+

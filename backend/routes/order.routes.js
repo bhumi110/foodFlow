@@ -6,13 +6,13 @@ const authMiddleware= require("../middleware/auth.middleware");
 // Customer psnel
 router.post("/create",authMiddleware, orderController.createOrder);
 router.put("/cancel/:id", orderController.cancelOrder);
+router.get("/customer/:customerId", authMiddleware, orderController.getOrdersForCustomer);
 
 // Restaurant panel
-router.get("/restaurant/:restaurantId", orderController.getOrdersForRestaurant);
+router.get("/restaurant/:restaurantId",authMiddleware, orderController.getOrdersForRestaurant);
 router.put("/status/:id", orderController.updateOrderStatus);
 
 module.exports = router;
-
 
 
 // {

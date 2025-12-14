@@ -6,7 +6,10 @@ export const createOrder = (data) =>
 export const cancelOrder = (orderId) =>
   api.put(`/order/cancel/${orderId}`);
 
-export const getRestaurantOrders = (restaurantId) =>
+export const getOrdersForCustomer = (customerId) =>
+  api.get(`/order/customer/${customerId}`);
+
+export const getOrdersForRestaurant = (restaurantId) =>
   api.get(`/order/restaurant/${restaurantId}`);
 
 export const updateOrderStatus = (orderId, data) =>

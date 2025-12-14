@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Box, Button, Card, TextField, Typography } from "@mui/material";
-import { admin } from "../../api/auth.api";
+import { admin } from "../../api/admin.api";
 import { useNavigate } from "react-router-dom";
 import "../auth/auth.css"
 
@@ -19,7 +19,7 @@ export default function AdminLoginogin() {
       localStorage.setItem("role", res.data.user.role);
        localStorage.setItem("email", res.data.user.email);
       
-       navigate("/dashboard");
+       navigate("/");
     } catch (err) {
       alert(err.response?.data?.msg || "Login failed");
     }

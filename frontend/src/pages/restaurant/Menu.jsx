@@ -9,33 +9,31 @@ import {
 } from "../../api/menu.api";
 
 const Menu = () => {
-  // Hardcoded restaurant ID
-  const restaurantId = "693da2c6c5cd092fb065c95a";
+  const restaurantId = "693f029aa3617013d3284f5f";
 
   const [menuItems, setMenuItems] = useState([]);
   const [loading, setLoading] = useState(true);
   const [showModal, setShowModal] = useState(false);
   const [editingItem, setEditingItem] = useState(null);
 
-  // Fetch menu items
   const fetchMenu = async () => {
-    try {
-      const res = await getMenuItems(restaurantId);
-      // Ensure menuItems is always an array
-      setMenuItems(Array.isArray(res.data) ? res.data : []);
-    } catch (err) {
-      console.error("Failed to fetch menu", err.response?.data || err);
-      alert("Failed to load menu. Check console.");
-    } finally {
-      setLoading(false);
-    }
-  };
+  try {
+    const res = await getMenuItems(restaurantId);
+
+    setMenuItems(res.data.data);
+  } catch (err) {
+    console.error("Failed to fetch menu", err);
+    setMenuItems([]);
+  } finally {
+    setLoading(false);
+  }
+};
+
 
   useEffect(() => {
     fetchMenu();
   }, []);
 
-  // Add or edit a menu item
   const handleSave = async (item) => {
     try {
       if (editingItem) {
@@ -43,40 +41,30 @@ const Menu = () => {
       } else {
         await createMenuItem(restaurantId, item);
       }
-      await fetchMenu(); // Fetch updated menu immediately
+
+      await fetchMenu();
       setShowModal(false);
       setEditingItem(null);
     } catch (err) {
-      console.error("Save failed", err.response?.data || err);
-      alert("Failed to save menu item.");
+      console.error("Save failed", err);
+      alert("Save failed");
     }
   };
 
-  // Delete a menu item
   const handleDelete = async (id) => {
-    try {
-      await deleteMenuItem(id);
-      await fetchMenu();
-    } catch (err) {
-      console.error("Delete failed", err.response?.data || err);
-      alert("Failed to delete menu item.");
-    }
+    await deleteMenuItem(id);
+    fetchMenu();
   };
+
 
   if (loading) return <p>Loading menu...</p>;
 
   return (
     <>
-      <div className="menu-header d-flex justify-content-between align-items-center mb-3">
+      <div className="menu-header">
         <h2>Menu Management</h2>
-        <Button
-          variant="warning"
-          onClick={() => {
-            setEditingItem(null);
-            setShowModal(true);
-          }}
-        >
-          + Add Item
+        <Button variant="warning" onClick={() => setShowModal(true)}>
+          <i class="fa-regular fa-square-plus"></i> Add Item
         </Button>
       </div>
 
@@ -84,14 +72,17 @@ const Menu = () => {
         {menuItems.length === 0 && <p>No menu items found</p>}
 
         {menuItems.map((item) => (
-          <Col md={4} key={item._id} className="mb-4">
-            <Card className="menu-card">
-              <Card.Body>
-                <Card.Title>{item.name}</Card.Title>
-                <p className="text-muted">{item.category}</p>
-                <p>{item.description}</p>
-                <h5>₹{item.price}</h5>
-                <div className="d-flex justify-content-between">
+          <Col md={12} key={item._id} className="mb-3">
+            <Card>
+              <Card.Body className="d-flex justify-content-between">
+                <div>
+                  <strong>{item.name}</strong>
+                  <div>
+                    ₹{item.price} • {item.category}
+                  </div>
+                </div>
+
+                <div>
                   <Button
                     size="sm"
                     variant="outline-warning"
@@ -100,14 +91,14 @@ const Menu = () => {
                       setShowModal(true);
                     }}
                   >
-                    Edit
-                  </Button>
+                    <i class="fa-solid fa-pen-to-square"></i>
+                  </Button>{" "}
                   <Button
                     size="sm"
                     variant="outline-danger"
                     onClick={() => handleDelete(item._id)}
                   >
-                    Delete
+                    <i class="fa-solid fa-trash-can"></i>
                   </Button>
                 </div>
               </Card.Body>

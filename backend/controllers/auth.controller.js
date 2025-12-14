@@ -78,30 +78,3 @@ exports.login = async (req, res) => {
 
 
 
-exports.adminLogin=async (req, res) => {
-  try {
-    const { email, password } = req.body;
-
-    if (email !== process.env.ADMIN_EMAIL) {
-      return res.status(400).json({ msg: "Invalid email" });
-    }
-
-    const isMatch = await bcrypt.compare(password, process.env.ADMIN_PASSWORD_HASH);
-
-    if (!isMatch) {
-      return res.status(400).json({ msg: "Incorrect password" });
-    }
-
-    return res.json({
-      msg: "Login successful",
-      user: {
-        name: "Admin",
-        email,
-        role: "Admin",
-      },
-    });
-
-  } catch (err) {
-    res.status(500).json({ msg: "Server Error", err });
-  }
-};

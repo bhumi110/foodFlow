@@ -17,7 +17,7 @@ const Settings = () => {
   useEffect(() => {
     const fetchRestaurant = async () => {
       try {
-        const res = await getRestaurantById("693da2c6c5cd092fb065c95a");
+        const res = await getRestaurantById("693f029aa3617013d3284f5f");
         if (res.data) {
           setRestaurant(res.data);
           setForm({
