@@ -3,7 +3,7 @@ const cors = require("cors");
 const app = express();
 
 app.use(cors({
-  origin: "http://localhost:5173",
+  origin: ["http://localhost:5173","https://foodflow-uw8o.onrender.com","*"],
   credentials: true,
 }));
 app.use(express.json());
