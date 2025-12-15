@@ -41,13 +41,22 @@ export default function AdminLogin() {
 
   return (
     <Box
+      minHeight="100vh"
       display="flex"
-      justifyContent="center"
       alignItems="center"
-      height="100vh"
-      sx={{ backgroundColor: "#f9fafb" }}
+      justifyContent="center"
+      sx={{
+        background:
+          "linear-gradient(135deg, #fff7ed 0%, #ffedd5 100%)",
+      }}
     >
-      <Card sx={{ width: 380, p: 4 }} className="corner">
+      <Card sx={{
+    width: "100%",
+    maxWidth: 420,
+    p: { xs: 3, sm: 4 },
+    borderRadius: 3,
+    boxShadow: "0 20px 40px rgba(0,0,0,0.08)",
+  }} className="corner">
         <Typography variant="h5" textAlign="center" mb={2}>
           Admin Login
         </Typography>
@@ -74,7 +83,17 @@ export default function AdminLogin() {
         <Button
           fullWidth
           variant="contained"
-          sx={{ mt: 2, bgcolor: "#f97316" }}
+          sx={{
+            mt: 3,
+            py: 1.3,
+            bgcolor: "#f97316",
+            fontWeight: 600,
+            fontSize: "1rem",
+            borderRadius: 2,
+            "&:hover": {
+              bgcolor: "#ea580c",
+            },
+          }}
           onClick={handleSubmit}
           disabled={loading}
         >

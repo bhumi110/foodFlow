@@ -1,8 +1,12 @@
+import { useState } from "react";
+
 import { Outlet, NavLink, useNavigate } from "react-router-dom";
 import "../pages/restaurant/restaurant.css";
 
 const AdminLayout = () => {
   const navigate = useNavigate();
+  const [open, setOpen] = useState(false);
+
 const email = localStorage.getItem("email");
   const role=localStorage.getItem("role");
 
@@ -18,8 +22,25 @@ const email = localStorage.getItem("email");
 
   return (
     <div className="restaurant-container">
+      {/* Mobile top bar */}
+      <div className="mobile-header">
+        <button className="menu-btn" onClick={() => setOpen(true)}>
+          <i className="fa-solid fa-bars"></i>
+        </button>
+
+        <h4 className="mobile-logo">
+          <i className="fa-solid fa-utensils"></i> FoodFlow
+        </h4>
+      </div>
+
+      {open && (
+        <div className="sidebar-backdrop" onClick={() => setOpen(false)} />
+        
+      )}
+
       {/* Sidebar */}
-      <aside className="sidebar">
+                  <aside className={`sidebar ${open ? "open" : ""}`}>
+
         <h4 className="logo"><i className="fa-solid fa-utensils"></i>FoodFlow</h4>
         <hr />
 
@@ -43,17 +64,17 @@ const email = localStorage.getItem("email");
   end
   className={({ isActive }) =>
     isActive ? "nav-item active" : "nav-item"
-  }
+  } onClick={() => setOpen(false)}
 >
-  <i className="fa-solid fa-chart-line"></i> Dashboard
+  <i className="fa-solid fa-chart-line" onClick={() => setOpen(false)}></i> Dashboard
 </NavLink>
-          <NavLink to="/admin/restaurants" className="nav-item">
+          <NavLink to="/admin/restaurants" className="nav-item" onClick={() => setOpen(false)}>
             <i className="fa-solid fa-archway"></i> Restaurants
           </NavLink>
-          <NavLink to="/admin/users" className="nav-item">
+          <NavLink to="/admin/users" className="nav-item" onClick={() => setOpen(false)}>
             <i className="fa-solid fa-users"></i> Users
           </NavLink>
-          <NavLink to="/admin/orders" className="nav-item">
+          <NavLink to="/admin/orders" className="nav-item" onClick={() => setOpen(false)}>
             <i className="fa-solid fa-cart-shopping"></i> Orders
           </NavLink>
         </nav>

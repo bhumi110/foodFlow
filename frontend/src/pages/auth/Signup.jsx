@@ -47,11 +47,12 @@ export default function Signup() {
     >
       <Card
         sx={{
-          width: 440,
-          p: 4,
-          borderRadius: 3,
-          boxShadow: "0 20px 40px rgba(0,0,0,0.08)",
-        }}
+    width: "100%",
+    maxWidth: 420,
+    p: { xs: 3, sm: 4 },
+    borderRadius: 3,
+    boxShadow: "0 20px 40px rgba(0,0,0,0.08)",
+  }}
         className="corner"
       >
         <Typography

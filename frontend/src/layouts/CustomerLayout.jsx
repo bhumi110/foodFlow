@@ -1,26 +1,46 @@
+import { useState } from "react";
+
 import { Outlet, NavLink, useNavigate } from "react-router-dom";
 import "../pages/restaurant/restaurant.css";
 
-const RestaurantLayout = () => {
+const CustomerLayout = () => {
   const navigate = useNavigate();
-const email = localStorage.getItem("email");
-  const role=localStorage.getItem("role");
+  const [open, setOpen] = useState(false);
 
+  const email = localStorage.getItem("email");
+  const role = localStorage.getItem("role");
 
   const handleLogout = () => {
-    localStorage.removeItem("token");
-    localStorage.removeItem("role");
-    localStorage.removeItem("userId");
-    localStorage.removeItem("email");
-
+    localStorage.clear();
     navigate("/login", { replace: true });
   };
 
   return (
     <div className="restaurant-container">
+      {/* Mobile top bar */}
+      <div className="mobile-header">
+        <button className="menu-btn" onClick={() => setOpen(true)}>
+          <i className="fa-solid fa-bars"></i>
+        </button>
+
+        <h4 className="mobile-logo">
+          <i className="fa-solid fa-utensils"></i> FoodFlow
+        </h4>
+      </div>
+
+      {open && (
+        <div className="sidebar-backdrop" onClick={() => setOpen(false)} />
+        
+      )}
+      
+
       {/* Sidebar */}
-      <aside className="sidebar">
-        <h4 className="logo"><i className="fa-solid fa-utensils"></i>FoodFlow</h4>
+      <aside className={`sidebar ${open ? "open" : ""}`}>
+        
+
+        <h4 className="logo">
+          <i className="fa-solid fa-utensils"></i>FoodFlow
+        </h4>
         <hr />
 
         <div
@@ -32,32 +52,37 @@ const email = localStorage.getItem("email");
             color: "#472103",
           }}
         >
-          <h6 style={{ fontWeight: "normal" }}>Customer Panel <i className="fa-solid fa-spoon"></i></h6>
+          <h6 style={{ fontWeight: "normal" }}>
+            Customer Panel <i className="fa-solid fa-spoon"></i>
+          </h6>
         </div>
 
         <hr />
 
         <nav>
           <NavLink
-  to="/customer"
-  end
-  className={({ isActive }) =>
-    isActive ? "nav-item active" : "nav-item"
-  }
->
-  <i className="fa-solid fa-archway"></i> Restaurant
-</NavLink>
-          <NavLink to="/customer/order" className="nav-item">
+            to="/customer"
+            end
+            className= {({ isActive }) =>
+              isActive ? "nav-item active" : "nav-item"
+            } onClick={() => setOpen(false)}
+          >
+            <i className="fa-solid fa-archway"></i> Restaurant
+          </NavLink>
+          <NavLink to="/customer/order" className="nav-item" onClick={() => setOpen(false)}>
             <i className="fa-solid fa-clock-rotate-left"></i> My Order
           </NavLink>
-          <NavLink to="/customer/cart" className="nav-item">
+          <NavLink to="/customer/cart" className="nav-item" onClick={() => setOpen(false)}>
             <i className="fa-solid fa-cart-shopping"></i> Cart
           </NavLink>
         </nav>
 
         <div className="sidebar-footer">
-          <hr/>
-          <p className="email"><i className="fa-solid fa-user-check"> </i>{email || "customer@foodflow.com"}</p>
+          <hr />
+          <p className="email">
+            <i className="fa-solid fa-user-check"> </i>
+            {email || "customer@foodflow.com"}
+          </p>
           <p className="email">{role || "role"}</p>
 
           <button
@@ -77,4 +102,4 @@ const email = localStorage.getItem("email");
   );
 };
 
-export default RestaurantLayout;
+export default CustomerLayout;
