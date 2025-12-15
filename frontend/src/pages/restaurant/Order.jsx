@@ -3,7 +3,7 @@ import { Card, Badge, Form } from "react-bootstrap";
 import { getOrdersForRestaurant, updateOrderStatus } from "../../api/order.api";
 
 const Order = () => {
-  const restaurantId = "693f029aa3617013d3284f5f";
+  const restaurantId = "694006414c312a0766a85664";
 
   const [orders, setOrders] = useState([]);
   const [loading, setLoading] = useState(true);

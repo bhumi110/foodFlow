@@ -9,7 +9,7 @@ import {
 } from "../../api/menu.api";
 
 const Menu = () => {
-  const restaurantId = "693f029aa3617013d3284f5f";
+  const restaurantId = "694006414c312a0766a85664";
 
   const [menuItems, setMenuItems] = useState([]);
   const [loading, setLoading] = useState(true);

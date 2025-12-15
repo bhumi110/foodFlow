@@ -3,8 +3,8 @@ import { Card, Badge, Button } from "react-bootstrap";
 import { getOrdersForCustomer, cancelOrder } from "../../api/order.api";
 
 const Orders = () => {
-  // const customerId = localStorage.getItem("customerId");
-  const customerId="693f0678a3617013d3284f8b";
+  // const customerId = localStorage.getItem("userId");
+  const customerId="694004b34c312a0766a8565b";
   const [orders, setOrders] = useState([]);
   const [loading, setLoading] = useState(true);
 
