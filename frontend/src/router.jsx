@@ -9,6 +9,12 @@ import RestaurantLayout from "./layouts/RestaurantLayout";
 import CustomerLayout from "./layouts/CustomerLayout";
 
 import AdminDashboard from "./pages/admin/Dashboard";
+import AdminProtectedRoute from "./components/adminProtectedRoute";
+import AdminOrder from "./pages/admin/Order";
+import AdminUser from "./pages/admin/User";
+import AdminRestaurant from "./pages/admin/Restaurant";
+
+
 import RestaurantMenu from "./pages/restaurant/Menu";
 import RestaurantSettings from "./pages/restaurant/Settings";
 import RestaurantOrders from "./pages/restaurant/Order";
@@ -23,17 +29,21 @@ import ProtectedRoute from "./components/ProtectedRoute";
 const router = createBrowserRouter([
   { path: "/login", element: <Login /> },
   { path: "/", element: <Signup /> },
-
   { path: "/admin/login", element: <AdminLogin /> },
 
   {
     path: "/admin",
     element: (
-      
+      <AdminProtectedRoute>
         <AdminLayout />
+      </AdminProtectedRoute>
     ),
     children: [
-      { path: "dashboard", element: <AdminDashboard /> },
+      { index:true, element: <AdminDashboard /> },
+      { path: "orders", element: <AdminOrder /> },
+      { path: "restaurants", element: <AdminRestaurant /> },
+      { path: "users", element: <AdminUser /> },
+
     ],
   },
 
@@ -52,20 +62,20 @@ const router = createBrowserRouter([
   },
 
   {
-  path: "/customer",
-  element: (
-    <ProtectedRoute role="Customer">
-      <CustomerLayout />
-    </ProtectedRoute>
-  ),
-  children: [
-    { index: true, element: <CustomerHome /> },
-    { path: "menu/:restaurantId", element: <Menu /> },
-    { path: "cart", element: <Cart /> },
-    { path: "order", element: <Orders /> },
-  ],
-},
-
+    path: "/customer",
+    element: (
+      <ProtectedRoute role="Customer">
+        <CustomerLayout />
+      </ProtectedRoute>
+    ),
+    children: [
+      { index: true, element: <CustomerHome /> },
+      { path: "menu/:restaurantId", element: <Menu /> },
+      { path: "cart", element: <Cart /> },
+      { path: "order", element: <Orders /> },
+    ],
+  },
 ]);
+
 
 export default router;

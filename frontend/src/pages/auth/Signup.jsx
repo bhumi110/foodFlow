@@ -6,11 +6,11 @@ import {
   MenuItem,
   TextField,
   Typography,
+  Divider,
 } from "@mui/material";
 import { signup } from "../../api/auth.api";
 import { useNavigate } from "react-router-dom";
-import "./auth.css"
-
+import "./auth.css";
 
 export default function Signup() {
   const navigate = useNavigate();
@@ -35,11 +35,44 @@ export default function Signup() {
   };
 
   return (
-    <Box display="flex" justifyContent="center" alignItems="center" height="100vh">
-      <Card sx={{ width: 400, p: 4 }} className="corner">
-        <Typography variant="h5" textAlign="center" mb={2}>
+    <Box
+      minHeight="100vh"
+      display="flex"
+      alignItems="center"
+      justifyContent="center"
+      sx={{
+        background:
+          "linear-gradient(135deg, #fff7ed 0%, #ffedd5 100%)",
+      }}
+    >
+      <Card
+        sx={{
+          width: 440,
+          p: 4,
+          borderRadius: 3,
+          boxShadow: "0 20px 40px rgba(0,0,0,0.08)",
+        }}
+        className="corner"
+      >
+        <Typography
+          variant="h4"
+          textAlign="center"
+          fontWeight={700}
+          mb={1}
+        >
           Create Account
         </Typography>
+
+        <Typography
+          variant="body2"
+          textAlign="center"
+          color="text.secondary"
+          mb={3}
+        >
+          Join FoodFlow and start ordering or selling
+        </Typography>
+
+        <Divider sx={{ mb: 3 }} />
 
         <TextField
           fullWidth
@@ -51,7 +84,7 @@ export default function Signup() {
 
         <TextField
           fullWidth
-          label="Email"
+          label="Email Address"
           name="email"
           margin="normal"
           onChange={handleChange}
@@ -82,19 +115,38 @@ export default function Signup() {
         <Button
           fullWidth
           variant="contained"
-          sx={{ mt: 2, bgcolor: "#f97316" }}
+          sx={{
+            mt: 3,
+            py: 1.3,
+            bgcolor: "#f97316",
+            fontWeight: 600,
+            fontSize: "1rem",
+            borderRadius: 2,
+            "&:hover": {
+              bgcolor: "#ea580c",
+            },
+          }}
           onClick={handleSubmit}
         >
           Create Account
         </Button>
-        <Typography mt={2} textAlign="center">
+
+        <Typography mt={3} textAlign="center" variant="body2">
           Already have an account?{" "}
-          <span
-            style={{ color: "#f97316", cursor: "pointer", fontWeight: 500 }}
+          <Box
+            component="span"
+            sx={{
+              color: "#f97316",
+              cursor: "pointer",
+              fontWeight: 600,
+              "&:hover": {
+                textDecoration: "underline",
+              },
+            }}
             onClick={() => navigate("/login")}
           >
             Login
-          </span>
+          </Box>
         </Typography>
       </Card>
     </Box>
